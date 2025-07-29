@@ -1,6 +1,6 @@
 {
-  "name": "@mertdeveci55/luckyexcel-fixed",
-  "version": "1.1.21",
+  "name": "@chang-code-hub/luckyexcel-fixed",
+  "version": "1.1.33",
   "description": "An excel import and export library adapted to Luckysheet",
   "main": "dist/luckyexcel.cjs.js",
   "module": "dist/luckyexcel.esm.js",
@@ -29,6 +29,7 @@
   "scripts": {
     "build": "gulp build",
     "dev": "gulp dev",
+    "publish": "npm publish --access public --registry=https://registry.npmjs.org/",
     "release": "release-it",
     "release:beta": "release-it --preRelease=beta"
   },
@@ -36,11 +37,11 @@
     "Luckysheet",
     "excel"
   ],
-  "author": "zwight0705@gmail.com",
-  "homepage": "https://github.com/zwight/Luckyexcel",
+  "author": "lconly@gmail.com",
+  "homepage": "https://github.com/chang-code-hub/luckyexcel-fixed",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zwight/Luckyexcel.git"
+    "url": "git+https://github.com/chang-code-hub/luckyexcel-fixed.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -80,7 +81,8 @@
   },
   "dependencies": {
     "@progress/jszip-esm": "^1.0.4",
-    "@univerjs/core": "^0.6.10",
+    "@univerjs/core": "^0.10.0",
+    "@wendellhu/redi": "1.0.0",
     "@zwight/exceljs": "4.4.2",
     "dayjs": "^1.11.13",
     "nanoid": "^3.3.11",
