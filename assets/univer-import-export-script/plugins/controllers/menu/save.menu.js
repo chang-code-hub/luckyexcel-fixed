@@ -35,7 +35,7 @@ function CustomMenuItemSaveButtonFactory(
     title: 'customMenu.save',
   };
 }
-console.log(SaveSingle)
+
 const CustomSaveMenu = (config) => ({
   id: SaveOperationId,
   operation: SaveButtonOperation(config),

@@ -7,6 +7,7 @@ import { IuploadfileList } from "./ICommon";
 
 import { WorkBook } from "./UniverToExcel/Workbook";
 import exceljs from "@zwight/exceljs";
+
 import { CSV } from "./UniverToCsv/CSV";
 import { isObject } from "./common/method";
 import { UniverWorkBook } from "./LuckyToUniver/UniverWorkBook";
@@ -117,11 +118,11 @@ export class LuckyExcel {
     static async transformUniverToExcel(params: {
         snapshot: any,
         fileName?: string,
-        getBuffer?: boolean,
+        download?: boolean,
         success?: (buffer?: exceljs.Buffer) => void,
         error?: (err: Error) => void
     }) {
-        const { snapshot, fileName = `excel_${(new Date).getTime()}.xlsx`, getBuffer = false, success, error } = params;
+        const { snapshot, fileName = `excel_${(new Date).getTime()}.xlsx`, download = false, success, error } = params;
         try {
             // console.log(1, new Date())
             const workbook = new WorkBook(snapshot);
@@ -129,12 +130,10 @@ export class LuckyExcel {
             // console.log(2, new Date())
             const buffer = await workbook.xlsx.writeBuffer();
             // console.log(3, new Date())
-            if (getBuffer) {
-                success?.(buffer);
-            } else {
+            if (download) {
                 this.downloadFile(fileName, buffer);
-                success?.()
             }
+            success?.(buffer);
 
         } catch (err) {
             error?.(err)

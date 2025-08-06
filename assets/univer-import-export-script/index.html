@@ -96,15 +96,36 @@
         if (!activeWorkbook) {
             throw new Error('Workbook is not initialized');
         }
-        return activeWorkbook.save();
+        return activeWorkbook.getSnapshot();
     };
 
     univer.registerPlugin(UniverSheetsCustomMenuPlugin, {
         menu: [
             CustomSaveMenu({
-                after: () => {
+                after: async () => {
                     const saveData = getUniverSnapshot();
-                    console.log(saveData);
+                    console.log('snapshot', saveData);
+                    await LuckyExcel.transformUniverToExcel({
+                        snapshot: saveData,
+                        file: saveData.name,
+                        download: false,
+                        error: function (err) {
+                            console.error('convert-back-error', err);
+                        },
+                        success: function (buffer) {
+                            console.info('convert-back-success');
+                            let blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' })
+                            var file = new File([blob], saveData.name);
+
+                            LuckyExcel.transformExcelToUniver(file, async (exportJson) => {
+                                    console.log('reload', exportJson);
+                                    await univerAPI.createWorkbook(exportJson)
+                                },
+                                (error) => {
+                                    console.log(error);
+                                })
+                        }
+                    })
                 },
             }),
             CustomImportMenu({
