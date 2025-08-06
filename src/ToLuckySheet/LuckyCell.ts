@@ -19,6 +19,7 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
     private cell: Element
     private styles: IStyleCollections
     private sharedStrings: Element[]
+    private sharedStringValues: string[]
     private mergeCells: Element[]
     private cellImages: Element[]
     private imageList:ImageList
@@ -40,6 +41,16 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
         this.sheetFile = sheetFile;
         this.styles = styles;
         this.sharedStrings = sharedStrings;
+        this.sharedStringValues = []
+        for (const sharedString of sharedStrings) {
+            let sst = sharedString.getInnerElements("t")
+            if(sst!=null){
+                this.sharedStringValues.push(this.htmlDecode(sst[0].value) || "")
+            }
+            else{
+                this.sharedStringValues.push(null)
+            }
+        }
         this.readXml = ReadXml;
         this.mergeCells = mergeCells;
         this.cellImages = cellImages;
@@ -78,6 +89,7 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
         let clrScheme = this.styles["clrScheme"] as Element[];
 
         let sharedStrings = this.sharedStrings;
+        let sharedStringValues = this.sharedStringValues;
         let cellValue = new LuckySheetCelldataValue();
 
         if (f != null) {
@@ -729,9 +741,21 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
             }
             if (t == ST_CellType["SharedString"]) {
                 let siIndex = parseInt(v[0].value);
-                let sharedSI = sharedStrings[siIndex];
-                generateInlineString(sharedSI);
-                
+                let sharedSS = sharedStringValues[siIndex];
+                if(sharedSS != null ) {
+                    cellValue.v = sharedSS;
+                    let cellFormat = cellValue.ct;
+                    if (cellFormat == null) {
+                        cellFormat = new LuckySheetCellFormat();
+                    }
+                    cellFormat.t = "s";
+                    cellFormat.ci = this.getCellImage(cellValue, value);
+                    cellValue.ct = cellFormat;
+                }
+                else{
+                    let sharedSI =  sharedStrings[siIndex];
+                    generateInlineString(sharedSI);
+                }
             }
             else if (t == ST_CellType["InlineString"] && v != null) {
                 cellValue.v = this.htmlDecode(value);
