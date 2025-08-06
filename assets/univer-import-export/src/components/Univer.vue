@@ -96,9 +96,9 @@ const init = () => {
 
   univerAPI.value = FUniver.newAPI(univer);
 
-  
-  univer.registerPlugin(UniverRenderEnginePlugin);
-  univer.registerPlugin(UniverFormulaEnginePlugin);
+
+ univer.registerPlugin(UniverRenderEnginePlugin);
+ univer.registerPlugin(UniverFormulaEnginePlugin);
 
   univer.registerPlugin(UniverUIPlugin, {
     container: 'app',

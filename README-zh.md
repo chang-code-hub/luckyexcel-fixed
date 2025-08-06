@@ -105,7 +105,7 @@ npm install @zwight/luckyexcel
 
 #### ES导入
 ```js
-import LuckyExcel from '@zwight/luckyexcel'
+import LuckyExcel from '@chang-code-hub/luckyexcel-fixed'
 
 // 得到xlsx文件后
 LuckyExcel.transformExcelToUniver(

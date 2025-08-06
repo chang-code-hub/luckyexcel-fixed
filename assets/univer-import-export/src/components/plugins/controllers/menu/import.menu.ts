@@ -19,7 +19,7 @@ import { DownloadSingle } from '@univerjs/icons';
 import { ICustomMenuPulginParams } from '../..';
 import { waitUserSelectExcelFile } from '../../../../utils';
 import { UnitModel } from '@univerjs/core/lib/types/common/unit';
-import LuckyExcel from '@zwight/luckyexcel';
+import LuckyExcel from '@chang-code-hub/luckyexcel-fixed';
 
 const OperationId = 'custom-menu.operation.import';
 const ImportButtonOperation: (config?: ICustomMenuPulginParams) => ICommand = (

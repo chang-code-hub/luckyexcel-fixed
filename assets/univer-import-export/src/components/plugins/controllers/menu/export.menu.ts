@@ -14,7 +14,7 @@ import {
 } from '@univerjs/ui';
 import { ExportSingle } from '@univerjs/icons';
 import { ICustomMenuPulginParams } from '../..';
-import LuckyExcel from '@zwight/luckyexcel';
+import LuckyExcel from '@chang-code-hub/luckyexcel-fixed';
 
 let exportWorker: Worker;
 const OperationId = 'custom-menu.operation.export';
@@ -103,6 +103,7 @@ function CustomMenuItemExportButtonFactory(): IMenuButtonItem<string> {
 }
 
 const CustomExportMenu = (config?: ICustomMenuPulginParams) => ({
+  id: OperationId,
   operation: ExportButtonOperation(config),
   shortcut: ExportShortcutItem,
   menu: CustomMenuItemExportButtonFactory,
