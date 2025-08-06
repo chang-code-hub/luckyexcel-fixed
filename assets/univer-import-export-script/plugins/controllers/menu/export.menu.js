@@ -1,5 +1,4 @@
 const { ExportSingle } = UniverIcons;
-import LuckyExcel from '@chang-code-hub/luckyexcel-fixed';
 
 const OperationId = 'custom-menu.operation.export';
 const ExportButtonOperation = (
@@ -68,4 +67,3 @@ const CustomExportMenu = (config) => ({
   icon: { name: 'ExportSingle', component: ExportSingle },
 });
 
-export default CustomExportMenu;
