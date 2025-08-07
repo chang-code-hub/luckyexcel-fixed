@@ -28,7 +28,8 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
         cell: Element, 
         cellSize: { width: number, height: number },
         styles: IStyleCollections, 
-        sharedStrings: Element[], 
+        sharedStrings: Element[],
+        sharedStringValues: string[],
         mergeCells: Element[], 
         sheetFile: string, 
         cellImages: Element[], 
@@ -41,16 +42,7 @@ export class LuckySheetCelldata extends LuckySheetCelldataBase {
         this.sheetFile = sheetFile;
         this.styles = styles;
         this.sharedStrings = sharedStrings;
-        this.sharedStringValues = []
-        for (const sharedString of sharedStrings) {
-            let sst = sharedString.getInnerElements("t")
-            if(sst!=null){
-                this.sharedStringValues.push(this.htmlDecode(sst[0].value) || "")
-            }
-            else{
-                this.sharedStringValues.push(null)
-            }
-        }
+        this.sharedStringValues = sharedStringValues;
         this.readXml = ReadXml;
         this.mergeCells = mergeCells;
         this.cellImages = cellImages;

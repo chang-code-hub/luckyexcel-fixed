@@ -20,6 +20,7 @@ export class LuckySheet extends LuckySheetBase {
     private isInitialCell:boolean
     private styles:IStyleCollections
     private sharedStrings:Element[]
+    private sharedStringValues:string[]
     private mergeCells:Element[]
     private calcChainEles:Element[]
     private sheetList:IattributeList
@@ -37,6 +38,18 @@ export class LuckySheet extends LuckySheetBase {
         this.sheetFile = allFileOption.sheetFile;
         this.styles = allFileOption.styles;
         this.sharedStrings = allFileOption.sharedStrings;
+
+        this.sharedStringValues = []
+        for (const sharedString of allFileOption.sharedStrings) {
+            let sst = sharedString.getInnerElements("t")
+            if(sst!=null){
+                this.sharedStringValues.push(this.htmlDecode(sst[0].value) || "")
+            }
+            else{
+                this.sharedStringValues.push(null)
+            }
+        }
+
         this.calcChainEles = allFileOption.calcChain;
         this.sheetList = allFileOption.sheetList;
         this.imageList = allFileOption.imageList;
@@ -275,6 +288,12 @@ export class LuckySheet extends LuckySheetBase {
             this.getImageBaseInfo(drawingFile, drawingRelsFile)
         } 
     }
+
+    private htmlDecode(str: string): string {
+        return str.replace(/&#(x)?([^&]{1,5});/g, function ($, $1, $2) {
+            return String.fromCharCode(parseInt($2, $1 ? 16 : 10));
+        });
+    };
 
     private getImageBaseInfo = (drawingFile: string, drawingRelsFile: string): any => {
         let twoCellAnchors = this.readXml.getElementsByTagName("xdr:twoCellAnchor", drawingFile);
@@ -540,7 +559,8 @@ export class LuckySheet extends LuckySheetBase {
                         cell, 
                         cellSize,
                         this.styles, 
-                        this.sharedStrings, 
+                        this.sharedStrings,
+                        this.sharedStringValues,
                         this.mergeCells,
                         this.sheetFile, 
                         this.cellImages, 
