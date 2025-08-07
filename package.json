@@ -85,8 +85,8 @@
   "dependencies": {
     "@progress/jszip-esm": "^1.0.4",
     "@univerjs/core": "^0.10.0",
-    "@wendellhu/redi": "1.0.0",
-    "@zwight/exceljs": "4.4.2",
+    "@wendellhu/redi": "^1.0.0",
+    "@zwight/exceljs": "^4.4.2",
     "dayjs": "^1.11.13",
     "nanoid": "^3.3.11",
     "papaparse": "^5.5.3",
