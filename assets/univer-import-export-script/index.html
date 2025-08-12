@@ -114,7 +114,7 @@
                     await LuckyExcel.transformUniverToExcel({
                         snapshot: saveData,
                         file: saveData.name,
-                        getBuffer: false,
+                        getBuffer: true,
                         error: function (err) {
                             console.error('convert-back-error', err);
                         },
