@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>univer-import-export-script</title>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js"></script>
+    <script src="https://unpkg.com/echarts@5.6.0/dist/echarts.min.js"></script>
+
+    <script src="https://unpkg.com/@univerjs/presets/lib/umd/index.js"></script>
+
+    <script src="https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/index.js"></script>
+    <script src="https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/locales/zh-CN.js"></script>
+
+    <script src="https://unpkg.com/@univerjs/preset-sheets-filter/lib/umd/index.js"></script>
+    <script src="https://unpkg.com/@univerjs/preset-sheets-filter/lib/umd/locales/zh-CN.js"></script>
+
+    <script src="https://unpkg.com/@univerjs/preset-sheets-data-validation/lib/umd/index.js"></script>
+    <script src="https://unpkg.com/@univerjs/preset-sheets-data-validation/lib/umd/locales/zh-CN.js"></script>
+
+    <script src="./libs/univer-icons.umd.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/@univerjs/preset-sheets-core/lib/index.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/@univerjs/preset-sheets-filter/lib/index.css"/>
+    <style>
+        html,
+        body,
+        #root,
+        #app {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app"></div>
+<script>
+    (function loadScriptWithFallback() {
+        const primarySrc = '../../dist/luckyexcel.umd.js';
+        const backupSrc = 'luckyexcel.umd.js';
+
+        const script = document.createElement('script');
+        script.src = primarySrc;
+
+        // 加载失败时使用备用地址
+        script.onerror = function () {
+            console.warn('Primary script failed, loading fallback...');
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = backupSrc;
+            fallbackScript.onerror = function () {
+                console.error('Both script sources failed to load.');
+            };
+            document.head.appendChild(fallbackScript);
+        };
+
+        document.head.appendChild(script);
+    })();
+</script>
+
+<script src="./plugins/controllers/menu/index.js"></script>
+<script src="./plugins/controllers/menu/save.menu.js"></script>
+<script src="./plugins/controllers/menu/import.menu.js"></script>
+<script src="./plugins/controllers/menu/export.menu.js"></script>
+<script src="./plugins/controllers/custom-menu.controller.js"></script>
+<script src="./plugins/index.js"></script>
+<script>
+
+    const {createUniver} = UniverPresets;
+    const {LocaleType, merge} = UniverCore;
+    const {defaultTheme} = UniverDesign;
+    const {UniverSheetsCorePreset} = UniverPresetSheetsCore;
+    const {UniverSheetsFilterPreset} = UniverPresetSheetsFilter;
+    const {UniverSheetsDataValidationPreset } = UniverPresetSheetsDataValidation ;
+
+    const {univerAPI, univer} = createUniver({
+        locale: LocaleType.ZH_CN,
+        locales: {
+            [LocaleType.ZH_CN]: merge(
+                {},
+                UniverPresetSheetsCoreZhCN,
+                UniverPresetSheetsFilterZhCN,
+                UniverPresetSheetsDataValidationZhCN
+            ),
+        },
+        theme: defaultTheme,
+        presets: [
+            UniverSheetsCorePreset(),
+            UniverSheetsFilterPreset(),
+            UniverSheetsDataValidationPreset(),
+        ],
+    });
+
+    const getUniverSnapshot = () => {
+        const activeWorkbook = univerAPI.getActiveWorkbook();
+        if (!activeWorkbook) {
+            throw new Error('Workbook is not initialized');
+        }
+        return activeWorkbook.getSnapshot();
+    };
+
+    univer.registerPlugin(UniverSheetsCustomMenuPlugin, {
+        menu: [
+            CustomSaveMenu({
+                after: async () => {
+                    const saveData = getUniverSnapshot();
+                    console.log('snapshot', saveData);
+                    await LuckyExcel.transformUniverToExcel({
+                        snapshot: saveData,
+                        file: saveData.name,
+                        getBuffer: true,
+                        error: function (err) {
+                            console.error('convert-back-error', err);
+                        },
+                        success: function (buffer) {
+                            console.info('convert-back-success');
+                            let blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' })
+                            var file = new File([blob], saveData.name);
+
+                            LuckyExcel.transformExcelToUniver(file, async (exportJson) => {
+                                    console.log('reload', exportJson);
+                                    await univerAPI.createWorkbook(exportJson)
+                                },
+                                (error) => {
+                                    console.log(error);
+                                })
+                        }
+                    })
+                },
+            }),
+            CustomImportMenu({
+                before: () => {
+                    // loading.value = true;
+                },
+                after: ({error}) => {
+                    // loading.value = false;
+                    if (error) {
+                        console.error(error.message || '导入失败');
+                        return;
+                    }
+                    console.info('导入成功');
+                },
+            }),
+            CustomExportMenu({
+                snapshot: getUniverSnapshot,
+                after: (res) => {
+                    if (res) {
+                        message.error(res.message || '导出失败');
+                    } else {
+                        message.success('导出成功');
+                    }
+                },
+            }),
+        ]
+    })
+
+    univerAPI.createWorkbook({name: 'Test Sheet'}); // 创建一个名为 'Test Sheet' 的工作表
+</script>
+</body>
+
+</html>
