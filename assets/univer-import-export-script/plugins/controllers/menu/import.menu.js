@@ -9,9 +9,9 @@ const ImportButtonOperation = (
   handler: async (_accessor) => {
     config?.before?.();
     const univer = _accessor.get(IUniverInstanceService);
-    const unitId = univer
-      .getCurrentUnitForType(UniverInstanceType.UNIVER_SHEET)
-      ?.getUnitId();
+    // const unitId = univer
+    //   .getCurrentUnitForType(UniverInstanceType.UNIVER_SHEET)
+    //   ?.getUnitId();
     try {
       waitUserSelectExcelFile({
         accept: '.xlsx',
@@ -19,10 +19,10 @@ const ImportButtonOperation = (
           LuckyExcel.transformExcelToUniver(
             file,
             async (exportJson) => {
-              if (unitId) {
-                univer.disposeUnit(unitId);
-              }
-              console.log(exportJson);
+              // if (unitId) {
+              //   univer.disposeUnit(unitId);
+              // }
+              console.log('open', exportJson);
               setTimeout(() => {
                 const workbook = univer.createUnit(
                   UniverInstanceType.UNIVER_SHEET,
