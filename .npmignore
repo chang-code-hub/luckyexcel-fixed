@@ -2,6 +2,7 @@
 src/
 gulpfile.js
 tsconfig.json
+assets/
 
 # Development files
 .git/
