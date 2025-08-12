@@ -1,10 +1,11 @@
 {
-  "name": "@mertdeveci55/univer-import-export",
+  "name": "@change-code-hub/univer-import-export",
   "version": "0.1.40",
   "description": "Excel/CSV import and export library for Univer spreadsheets with full format preservation",
   "private": false,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "main": "dist/luckyexcel.cjs.js",
   "module": "dist/luckyexcel.esm.js",
