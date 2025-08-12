@@ -1,5 +1,5 @@
 {
-  "name": "@change-code-hub/univer-import-export",
+  "name": "@chang-code-hub/univer-import-export",
   "version": "0.1.40",
   "description": "Excel/CSV import and export library for Univer spreadsheets with full format preservation",
   "private": false,
@@ -47,14 +47,14 @@
     "xlsx",
     "xls"
   ],
-  "author": "mertdeveci",
-  "homepage": "https://github.com/mertdeveci/univerjs-import-export",
+  "author": "mertdeveci chang",
+  "homepage": "https://github.com/chang-code-hub/univerjs-import-export",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mertdeveci/univerjs-import-export.git"
+    "url": "git+https://github.com/chang-code-hub/univerjs-import-export.git"
   },
   "bugs": {
-    "url": "https://github.com/mertdeveci/univerjs-import-export/issues"
+    "url": "https://github.com/chang-code-hub/univerjs-import-export/issues"
   },
   "license": "MIT",
   "devDependencies": {
