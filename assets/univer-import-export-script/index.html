@@ -102,7 +102,7 @@
         if (!activeWorkbook) {
             throw new Error('Workbook is not initialized');
         }
-        return activeWorkbook.getSnapshot();
+        return activeWorkbook.save();
     };
 
     univer.registerPlugin(UniverSheetsCustomMenuPlugin, {
@@ -114,12 +114,12 @@
                     await LuckyExcel.transformUniverToExcel({
                         snapshot: saveData,
                         file: saveData.name,
-                        getBuffer: true,
+                        getBuffer: false,
                         error: function (err) {
                             console.error('convert-back-error', err);
                         },
                         success: function (buffer) {
-                            console.info('convert-back-success');
+                            if(buffer==null) return
                             let blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' })
                             var file = new File([blob], saveData.name);
 
